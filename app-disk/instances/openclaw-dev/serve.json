@@ -1,0 +1,15 @@
+{
+  "TCP": {
+    "443": {
+      "HTTPS": true
+    }
+  },
+  "HTTPS": {
+    "/": {
+      "Proxy": "http://openclaw:18789"
+    }
+  },
+  "AllowFunnel": {
+    "${TS_CERT_DOMAIN}:443": false
+  }
+}

@@ -1,0 +1,94 @@
+services:
+  openclaw:
+    image: ghcr.io/openclaw/openclaw:latest
+    container_name: openclaw-gateway
+    restart: unless-stopped
+    user: root
+
+    # TCP proxy in entrypoint listens on 0.0.0.0:18790 and forwards to OpenClaw loopback 127.0.0.1:18789.
+    # Tailscale reaches OpenClaw via Docker bridge on port 18790 (hostname: openclaw).
+    # Host port 18789 maps to container port 18790 for local testing.
+    ports:
+      - "18789:18790"
+
+    volumes:
+      - openclaw-data:/root/.openclaw
+      - /home/pi/projects:/home/node/workspace:cached
+      - ./entrypoint.sh:/entrypoint.sh:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/bin/docker:/usr/bin/docker:ro
+
+    secrets:
+      - anthropic_api_key
+      - openclaw_gateway_token
+
+    environment:
+      - OPENCLAW_WORKSPACE=/home/node/workspace
+      - OPENCLAW_LOG_LEVEL=info
+      - CLAUDE_CODE_MCP_ENABLED=true
+      - DEFAULT_PERMISSION_MODE=plan
+
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:18789 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+    entrypoint: ["/entrypoint.sh"]
+    command:
+      - "node"
+      - "dist/index.js"
+      - "gateway"
+      - "--port"
+      - "18789"
+      - "--allow-unconfigured"
+
+    networks:
+      - proxy-net
+
+  ssh-proxy:
+    image: alpine/socat
+    container_name: ssh-proxy
+    # Share the Tailscale container's network namespace so socat listens on the tailscale0
+    # interface (100.102.15.46) and forwards incoming SSH to the Pi host's SSH on 172.18.0.1:22.
+    network_mode: "service:tailscale"
+    command: TCP-LISTEN:22,fork,reuseaddr TCP:172.18.0.1:22
+    restart: unless-stopped
+    depends_on:
+      - tailscale
+
+  tailscale:
+    image: tailscale/tailscale:latest
+    container_name: tailscale
+    hostname: openclaw-pi
+    environment:
+      - TS_AUTHKEY=tskey-auth-kQdhbARFqA11CNTRL-anjb6Pa83T8a1uQe9eSnQ8Kdr3vV2J41
+      - TS_STATE_DIR=/var/lib/tailscale
+      - TS_USERSPACE=false
+      - TS_ACCEPT_DNS=true
+      - TS_EXTRA_ARGS=--accept-routes
+      # TS_SERVE_CONFIG removed — serve config persists in the tailscale-state volume (set via CLI)
+    volumes:
+      - tailscale-state:/var/lib/tailscale
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    cap_add:
+      - NET_ADMIN
+    restart: unless-stopped
+    networks:
+      - proxy-net
+
+secrets:
+  anthropic_api_key:
+    file: ./secrets/anthropic_api_key.txt
+  openclaw_gateway_token:
+    file: ./secrets/openclaw_gateway_token.txt
+
+volumes:
+  openclaw-data:
+  tailscale-state:
+
+networks:
+  proxy-net:
+    driver: bridge

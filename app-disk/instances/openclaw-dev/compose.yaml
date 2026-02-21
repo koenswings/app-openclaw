@@ -1,0 +1,77 @@
+x-app:
+  name: openclaw
+  version: 1.0.0
+  instanceName: OpenClaw Dev Assistant
+  title: "OpenClaw AI Development Assistant"
+  description: "Self-hosted AI assistant with per-codebase agents, accessed securely via Tailscale."
+  category: "Development"
+  icon: https://openclaw.ai/favicon.ico
+
+services:
+  openclaw:
+    image: ghcr.io/openclaw/openclaw:latest
+    container_name: openclaw-gateway
+    restart: unless-stopped
+    user: root
+    ports:
+      - "${port}:18789"
+    volumes:
+      - ./data/openclaw:/root/.openclaw
+      - /home/pi/projects:/home/node/workspace:cached
+      - ./entrypoint.sh:/entrypoint.sh:ro
+    secrets:
+      - anthropic_api_key
+      - openclaw_gateway_token
+    environment:
+      - OPENCLAW_WORKSPACE=/home/node/workspace
+      - OPENCLAW_LOG_LEVEL=info
+      - CLAUDE_CODE_MCP_ENABLED=true
+      - DEFAULT_PERMISSION_MODE=plan
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:18789 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    entrypoint: ["/entrypoint.sh"]
+    command:
+      - "node"
+      - "dist/index.js"
+      - "gateway"
+      - "--port"
+      - "18789"
+      - "--allow-unconfigured"
+    networks:
+      - proxy-net
+
+  tailscale:
+    image: tailscale/tailscale:latest
+    container_name: openclaw-tailscale
+    hostname: "${hostname}"
+    environment:
+      - TS_AUTHKEY=${ts_authkey}
+      - TS_STATE_DIR=/var/lib/tailscale
+      - TS_USERSPACE=false
+      - TS_ACCEPT_DNS=true
+      - TS_EXTRA_ARGS=--accept-routes
+      - TS_SERVE_CONFIG=/var/lib/tailscale/serve.json
+    volumes:
+      - ./data/tailscale:/var/lib/tailscale
+      - ./serve.json:/var/lib/tailscale/serve.json:ro
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    cap_add:
+      - NET_ADMIN
+    restart: unless-stopped
+    networks:
+      - proxy-net
+
+secrets:
+  anthropic_api_key:
+    file: ./secrets/anthropic_api_key.txt
+  openclaw_gateway_token:
+    file: ./secrets/openclaw_gateway_token.txt
+
+networks:
+  proxy-net:
+    driver: bridge
