@@ -13,7 +13,7 @@ services:
 
     volumes:
       - openclaw-data:/root/.openclaw
-      - /home/pi/projects:/home/node/workspace:cached
+      - /home/pi/idea:/home/node/workspace:cached
       - ./entrypoint.sh:/entrypoint.sh:ro
       - /var/run/docker.sock:/var/run/docker.sock
       - /usr/bin/docker:/usr/bin/docker:ro
