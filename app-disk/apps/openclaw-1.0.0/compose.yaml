@@ -48,7 +48,6 @@ services:
     container_name: openclaw-tailscale
     hostname: "${hostname}"
     environment:
-      - TS_AUTHKEY=${ts_authkey}
       - TS_STATE_DIR=/var/lib/tailscale
       - TS_USERSPACE=false
       - TS_ACCEPT_DNS=true
@@ -57,6 +56,10 @@ services:
     volumes:
       - ./data/tailscale:/var/lib/tailscale
       - ./serve.json:/var/lib/tailscale/serve.json:ro
+      - ./tailscale-entrypoint.sh:/entrypoint.sh:ro
+    entrypoint: ["/entrypoint.sh"]
+    secrets:
+      - tailscale_authkey
     devices:
       - /dev/net/tun:/dev/net/tun
     cap_add:
@@ -70,6 +73,8 @@ secrets:
     file: ./secrets/anthropic_api_key.txt
   openclaw_gateway_token:
     file: ./secrets/openclaw_gateway_token.txt
+  tailscale_authkey:
+    file: ./secrets/tailscale_authkey.txt
 
 networks:
   proxy-net:

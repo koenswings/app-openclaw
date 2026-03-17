@@ -25,6 +25,7 @@ services:
     environment:
       - OPENCLAW_WORKSPACE=/home/node/workspace
       - OPENCLAW_LOG_LEVEL=info
+      - OPENCLAW_VERSION=2026.2.17
       - CLAUDE_CODE_MCP_ENABLED=true
       - DEFAULT_PERMISSION_MODE=plan
 
@@ -63,7 +64,6 @@ services:
     container_name: tailscale
     hostname: openclaw-pi
     environment:
-      - TS_AUTHKEY=tskey-auth-kQdhbARFqA11CNTRL-anjb6Pa83T8a1uQe9eSnQ8Kdr3vV2J41
       - TS_STATE_DIR=/var/lib/tailscale
       - TS_USERSPACE=false
       - TS_ACCEPT_DNS=true
