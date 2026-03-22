@@ -1,0 +1,242 @@
+{
+  "meta": {
+    "lastTouchedVersion": "2026.2.17",
+    "lastTouchedAt": "2026-03-19T20:34:21.673Z"
+  },
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "anthropic/claude-sonnet-4-6"
+      },
+      "models": {
+        "anthropic/claude-sonnet-4-6": {
+          "alias": "sonnet",
+          "params": {
+            "cacheRetention": "short"
+          }
+        }
+      },
+      "contextPruning": {
+        "mode": "cache-ttl",
+        "ttl": "1h"
+      },
+      "compaction": {
+        "mode": "safeguard"
+      },
+      "heartbeat": {
+        "every": "30m"
+      }
+    },
+    "list": [
+      {
+        "id": "engine-dev",
+        "workspace": "/home/node/workspace/agents/agent-engine-dev"
+      },
+      {
+        "id": "console-dev",
+        "workspace": "/home/node/workspace/agents/agent-console-dev"
+      },
+      {
+        "id": "site-dev",
+        "workspace": "/home/node/workspace/agents/agent-site-dev"
+      },
+      {
+        "id": "quality-manager",
+        "workspace": "/home/node/workspace/agents/agent-quality-manager"
+      },
+      {
+        "id": "programme-manager",
+        "workspace": "/home/node/workspace/agents/agent-programme-manager"
+      },
+      {
+        "id": "researcher",
+        "workspace": "/home/node/workspace/agents/agent-researcher"
+      },
+      {
+        "id": "mc-gateway-5632ed12-add5-4935-8a19-9fff6d9a9c91",
+        "name": "OpenClaw Pi Gateway Agent",
+        "workspace": "/home/node/workspace/workspace-gateway-5632ed12-add5-4935-8a19-9fff6d9a9c91",
+        "agentDir": "/root/.openclaw/agents/mc-gateway-5632ed12-add5-4935-8a19-9fff6d9a9c91/agent"
+      },
+      {
+        "id": "mc-gateway-ccc8463b-8b7d-46a1-afea-f699081b44c2",
+        "name": "OpenClaw Pi Gateway Agent",
+        "workspace": "/home/node/workspace/workspace-gateway-ccc8463b-8b7d-46a1-afea-f699081b44c2",
+        "agentDir": "/root/.openclaw/agents/mc-gateway-ccc8463b-8b7d-46a1-afea-f699081b44c2/agent",
+        "heartbeat": {
+          "every": "0m",
+          "includeReasoning": false,
+          "target": "last"
+        }
+      },
+      {
+        "id": "lead-6bddb9d2-c06f-444d-8b18-b517aeaa6aa8",
+        "name": "Axle",
+        "workspace": "/home/node/workspace/agents/agent-engine-dev",
+        "agentDir": "/root/.openclaw/agents/lead-6bddb9d2-c06f-444d-8b18-b517aeaa6aa8/agent",
+        "heartbeat": {
+          "every": "0m",
+          "includeReasoning": false,
+          "target": "last"
+        }
+      },
+      {
+        "id": "lead-ac508766-e9e3-48a0-b6a5-54c6ffcdc1a3",
+        "name": "Pixel",
+        "workspace": "/home/node/workspace/agents/agent-console-dev",
+        "agentDir": "/root/.openclaw/agents/lead-ac508766-e9e3-48a0-b6a5-54c6ffcdc1a3/agent",
+        "heartbeat": {
+          "every": "0m",
+          "includeReasoning": false,
+          "target": "last"
+        }
+      },
+      {
+        "id": "lead-7cc2a1cf-fa22-485f-b842-bb22cb758257",
+        "name": "Beacon",
+        "workspace": "/home/node/workspace/agents/agent-site-dev",
+        "agentDir": "/root/.openclaw/agents/lead-7cc2a1cf-fa22-485f-b842-bb22cb758257/agent",
+        "heartbeat": {
+          "every": "0m",
+          "includeReasoning": false,
+          "target": "last"
+        }
+      },
+      {
+        "id": "lead-d0cfa49e-edcb-4a23-832b-c2ae2c99bf67",
+        "name": "Veri",
+        "workspace": "/home/node/workspace/agents/agent-quality-manager",
+        "agentDir": "/root/.openclaw/agents/lead-d0cfa49e-edcb-4a23-832b-c2ae2c99bf67/agent",
+        "heartbeat": {
+          "every": "0m",
+          "includeReasoning": false,
+          "target": "last"
+        }
+      },
+      {
+        "id": "lead-3f1be9c8-87e7-4a5d-9d3b-99756c35e3a9",
+        "name": "Marco",
+        "workspace": "/home/node/workspace/agents/agent-programme-manager",
+        "agentDir": "/root/.openclaw/agents/lead-3f1be9c8-87e7-4a5d-9d3b-99756c35e3a9/agent",
+        "heartbeat": {
+          "every": "0m",
+          "includeReasoning": false,
+          "target": "last"
+        }
+      }
+    ]
+  },
+  "bindings": [
+    {
+      "agentId": "lead-6bddb9d2-c06f-444d-8b18-b517aeaa6aa8",
+      "match": {
+        "channel": "telegram",
+        "peer": {
+          "kind": "group",
+          "id": "-5146184666"
+        }
+      }
+    },
+    {
+      "agentId": "lead-ac508766-e9e3-48a0-b6a5-54c6ffcdc1a3",
+      "match": {
+        "channel": "telegram",
+        "peer": {
+          "kind": "group",
+          "id": "-5187034968"
+        }
+      }
+    },
+    {
+      "agentId": "lead-7cc2a1cf-fa22-485f-b842-bb22cb758257",
+      "match": {
+        "channel": "telegram",
+        "peer": {
+          "kind": "group",
+          "id": "-5139661372"
+        }
+      }
+    },
+    {
+      "agentId": "lead-d0cfa49e-edcb-4a23-832b-c2ae2c99bf67",
+      "match": {
+        "channel": "telegram",
+        "peer": {
+          "kind": "group",
+          "id": "-5286995682"
+        }
+      }
+    },
+    {
+      "agentId": "lead-3f1be9c8-87e7-4a5d-9d3b-99756c35e3a9",
+      "match": {
+        "channel": "telegram",
+        "peer": {
+          "kind": "group",
+          "id": "-5141459717"
+        }
+      }
+    },
+    {
+      "agentId": "researcher",
+      "match": {
+        "channel": "telegram",
+        "peer": {
+          "kind": "group",
+          "id": "-5105695997"
+        }
+      }
+    }
+  ],
+  "commands": {
+    "native": "auto",
+    "nativeSkills": "auto"
+  },
+  "channels": {
+    "defaults": {
+      "heartbeat": {
+        "showOk": false,
+        "showAlerts": true,
+        "useIndicator": true
+      }
+    },
+    "telegram": {
+      "dmPolicy": "allowlist",
+      "botToken": "${TELEGRAM_BOT_TOKEN}",
+      "allowFrom": [
+        "8320646468",
+        "-5146184666",
+        "-5187034968",
+        "-5139661372",
+        "-5286995682",
+        "-5141459717",
+        "-5105695997"
+      ],
+      "groupPolicy": "allowlist",
+      "streamMode": "partial",
+      "groups": {
+        "*": {
+          "requireMention": false
+        }
+      },
+      "groupAllowFrom": [
+        "8320646468"
+      ]
+    }
+  },
+  "gateway": {
+    "trustedProxies": [
+      "127.0.0.1"
+    ],
+    "remote": {
+      "token": "${GATEWAY_REMOTE_TOKEN}"
+    }
+  },
+  "plugins": {
+    "entries": {
+      "telegram": {
+        "enabled": true
+      }
+    }
+  }
+}

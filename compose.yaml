@@ -68,6 +68,7 @@ services:
       - TS_USERSPACE=false
       - TS_ACCEPT_DNS=true
       - TS_EXTRA_ARGS=--accept-routes
+      - TS_AUTHKEY=${TAILSCALE_AUTH_KEY}
       # TS_SERVE_CONFIG removed — serve config persists in the tailscale-state volume (set via CLI)
     volumes:
       - tailscale-state:/var/lib/tailscale

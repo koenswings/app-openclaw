@@ -1,0 +1,35 @@
+# openclaw.json
+
+`openclaw.json` in this repo is a **scrubbed template**. Secret values are replaced with
+`${PLACEHOLDER}` notation:
+
+| Placeholder | What to replace with |
+|-------------|---------------------|
+| `${TELEGRAM_BOT_TOKEN}` | Bot token from @BotFather for your Telegram bot |
+| `${GATEWAY_REMOTE_TOKEN}` | Random secret used to authenticate remote gateway connections |
+
+The live config lives in the Docker volume:
+`/var/lib/docker/volumes/openclaw_openclaw-data/_data/openclaw.json`
+
+## Keeping the template in sync
+
+After any change to the live openclaw.json, regenerate the template:
+
+```bash
+sudo python3 - <<'EOF'
+import json, copy
+
+with open('/var/lib/docker/volumes/openclaw_openclaw-data/_data/openclaw.json') as f:
+    data = json.loads(f.read())
+
+scrubbed = copy.deepcopy(data)
+scrubbed['channels']['telegram']['botToken'] = '${TELEGRAM_BOT_TOKEN}'
+scrubbed['gateway']['remote']['token'] = '${GATEWAY_REMOTE_TOKEN}'
+
+with open('/home/pi/openclaw/openclaw.json', 'w') as f:
+    json.dump(scrubbed, f, indent=2)
+print('Done')
+EOF
+```
+
+Then `git add openclaw.json && git commit -m "Update openclaw.json template"` and push.

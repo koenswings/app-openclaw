@@ -1,0 +1,3 @@
+[submodule "mission-control"]
+	path = mission-control
+	url = git@github.com:koenswings/openclaw-mission-control.git

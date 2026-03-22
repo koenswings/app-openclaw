@@ -1,3 +1,5 @@
 secrets/
 *.pdf
 tmp/
+.env
+openclaw.json.live
