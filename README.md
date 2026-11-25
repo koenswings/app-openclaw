@@ -1,5 +1,8 @@
 # OpenClaw on Raspberry Pi
 
+
+> **Not an IDEA school App Disk.** This compose is a special/dev deployment. It uses Docker named volumes (`openclaw-data`, `tailscale-state`) and absolute host-path binds (`/home/pi/idea`, `/var/run/docker.sock`, `/usr/bin/docker`). School Apps must not use those patterns: App data uses relative `./data` bind mounts on the App Disk, never named volumes, and never absolute host paths ([idea#141](https://github.com/koenswings/idea/issues/141)). This repo also has no `x-app` block and no `app.yaml`.
+
 Self-hosted AI development assistant running on the Pi, accessible from anywhere on the tailnet via Tailscale HTTPS. Manages multiple codebases as isolated agents, each with its own workspace.
 
 ## What this sets up
